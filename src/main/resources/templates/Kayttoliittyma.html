@@ -1,0 +1,22 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+    <head>
+        <title>Kayttoliittyma</title>
+        <meta charset="utf-8" /> 
+    </head>
+
+    <body>
+
+        <h1>Lähetä viesti keskustelualueelle</h1>
+
+
+        <form method="POST" action="/login">
+            Nimimerkki:<br/>
+            <input type="text" name="lähettäjän_nimimerkki"/><br/>
+            Viesti:<br/>
+            <input type="text" name="viesti"/><br/>
+            <input type="submit" value="Lähetä!"/>            
+        </form>
+    </body>
+</html>

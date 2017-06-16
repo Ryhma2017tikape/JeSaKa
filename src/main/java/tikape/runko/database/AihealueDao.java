@@ -11,20 +11,20 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import tikape.runko.domain.Keskustelu;
+import tikape.runko.Aihealue;
 
-public class KeskusteluDao implements Dao<Keskustelu, Integer> {
+public class AihealueDao implements Dao<Aihealue, Integer> {
 
     private Database database;
 
-    public KeskusteluDao(Database database) {
+    public AihealueDao(Database database) {
         this.database = database;
     }
 
     @Override
-    public Keskustelu findOne(Integer key) throws SQLException {
+    public Aihealue findOne(Integer key) throws SQLException {
         Connection connection = database.getConnection();
-        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Keskustelut WHERE tunnus = ?");
+        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Aihealueet WHERE tunnus = ?");
         stmt.setObject(1, key);
 
         ResultSet rs = stmt.executeQuery();
@@ -34,9 +34,10 @@ public class KeskusteluDao implements Dao<Keskustelu, Integer> {
         }
 
         Integer tunnus = rs.getInt("tunnus");
-        String otsikko = rs.getString("otsikko");
+        String nimi = rs.getString("nimi");
+        String kuvaus = rs.getString("kuvaus");
 
-        Keskustelu o = new Keskustelu(tunnus, otsikko);
+        Aihealue o = new Aihealue(tunnus, nimi, kuvaus);
 
         rs.close();
         stmt.close();
@@ -46,18 +47,19 @@ public class KeskusteluDao implements Dao<Keskustelu, Integer> {
     }
 
     @Override
-    public List<Keskustelu> findAll() throws SQLException {
+    public List<Aihealue> findAll() throws SQLException {
 
         Connection connection = database.getConnection();
-        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Keskustelut");
+        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Aihealueet");
 
         ResultSet rs = stmt.executeQuery();
-        List<Keskustelu> keskustelut = new ArrayList<>();
+        List<Aihealue> keskustelut = new ArrayList<>();
         while (rs.next()) {
             Integer tunnus = rs.getInt("tunnus");
-            String otsikko = rs.getString("otsikko");
+            String nimi = rs.getString("nimi");
+            String kuvaus = rs.getString("kuvaus");
 
-            keskustelut.add(new Keskustelu(tunnus, otsikko));
+            keskustelut.add(new Aihealue(tunnus, nimi, kuvaus));
         }
 
         rs.close();
@@ -73,3 +75,4 @@ public class KeskusteluDao implements Dao<Keskustelu, Integer> {
     }
 
 }
+

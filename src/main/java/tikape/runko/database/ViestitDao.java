@@ -11,20 +11,20 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import tikape.runko.domain.Keskustelu;
+import tikape.runko.Viesti;
 
-public class KeskusteluDao implements Dao<Keskustelu, Integer> {
+public class ViestitDao implements Dao<Viesti, Integer> {
 
     private Database database;
 
-    public KeskusteluDao(Database database) {
+    public ViestitDao(Database database) {
         this.database = database;
     }
 
     @Override
-    public Keskustelu findOne(Integer key) throws SQLException {
+    public Viesti findOne(Integer key) throws SQLException {
         Connection connection = database.getConnection();
-        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Keskustelut WHERE tunnus = ?");
+        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Viestit WHERE tunnus = ?");
         stmt.setObject(1, key);
 
         ResultSet rs = stmt.executeQuery();
@@ -34,9 +34,11 @@ public class KeskusteluDao implements Dao<Keskustelu, Integer> {
         }
 
         Integer tunnus = rs.getInt("tunnus");
-        String otsikko = rs.getString("otsikko");
+        String lähettäjän_nimimerkki = rs.getString("lähettäjän_nimimerkki");
+        String sisältö = rs.getString("sisältö");
+        String aika = rs.getString("aika");
 
-        Keskustelu o = new Keskustelu(tunnus, otsikko);
+        Viesti o = new Viesti(tunnus, lähettäjän_nimimerkki, sisältö, aika);
 
         rs.close();
         stmt.close();
@@ -46,25 +48,27 @@ public class KeskusteluDao implements Dao<Keskustelu, Integer> {
     }
 
     @Override
-    public List<Keskustelu> findAll() throws SQLException {
+    public List<Viesti> findAll() throws SQLException {
 
         Connection connection = database.getConnection();
-        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Keskustelut");
+        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Viestit");
 
         ResultSet rs = stmt.executeQuery();
-        List<Keskustelu> keskustelut = new ArrayList<>();
+        List<Viesti> viestit = new ArrayList<>();
         while (rs.next()) {
             Integer tunnus = rs.getInt("tunnus");
-            String otsikko = rs.getString("otsikko");
+            String lähettäjän_nimimerkki = rs.getString("lähettäjän_nimimerkki");
+            String sisältö = rs.getString("sisältö");
+            String aika = rs.getString("aika");
 
-            keskustelut.add(new Keskustelu(tunnus, otsikko));
+            viestit.add(new Viesti(tunnus, lähettäjän_nimimerkki, sisältö, aika));
         }
 
         rs.close();
         stmt.close();
         connection.close();
 
-        return keskustelut;
+        return viestit;
     }
 
     @Override
